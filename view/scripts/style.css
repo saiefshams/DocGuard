@@ -1,8 +1,25 @@
+@font-face {
+    font-family: "bebas";
+    src: url("../fonts/bebas_neue/BebasNeue-Regular.ttf");
+}
+@font-face {
+    font-family: "montserrat-bold";
+    src: url("../fonts/montserrat/Montserrat-Bold.otf");
+}
+@font-face {
+    font-family: "montserrat";
+    src: url("../fonts/montserrat/Montserrat-Regular.otf");
+}
+
 html, body {
-    background-color: #141414;
+    background: #141414;
     height: 100%;
     margin: 0;
-    color: white;
+    padding: 0;
+    color: silver;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: "montserrat", sans-serif;
 }
 
 body {
@@ -12,35 +29,107 @@ body {
 }
 
 .navbar {
+    display: flex;
+    justify-content: center; /* Center the navbar items */
+    align-items: center;
+    padding: 1em;
     background-color: #141414;
+    color: white;
+    font-family: "montserrat", sans-serif;
+    position: relative;
 }
 
 .navbar-brand {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    font-family: "bebas", sans-serif;
+    font-size: 2em;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
+    color: silver;
+    text-decoration: none;
+    flex-grow: 1; /* Ensure the brand stays on the left */
 }
 
-.navbar-nav .nav-item .nav-link {
-    color: white;
+.menuItems {
+    display: flex;
+    gap: 1em;
+    font-family: "montserrat-bold", sans-serif;
+    font-size: larger;
+    justify-content: center;
+    align-items: center;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+}
+
+.menuItems.show {
+    max-height: 500px; /* Arbitrary large value to ensure it expands fully */
+}
+
+.nav-link {
+    color: silver;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    opacity: 1;
+}
+
+.hamburgerButton {
+    display: none;
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 2em;
+    color: silver;
 }
 
 .container {
-    background-color: #141414; /* Ensure container has the same background color */
-    color: white; /* Ensure text is visible on dark background */
-    padding: 20px; /* Add some padding for better spacing */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-h1, p {
-    color: white; /* Ensure text is visible on dark background */
+h1 {
+    font-size: 3em;
+    font-weight: bold;
+    color: silver;
 }
 
-footer {
+.basicFooter {
     background-color: #141414;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
+    color: silver;
     width: 100%;
-    position: relative;
-    bottom: 0;
+    text-align: center;
+    padding: 1em;
+}
+
+@media screen and (max-width: 1024px) {
+    .menuItems {
+        justify-content: flex-end;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .menuItems {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #141414;
+        width: 100%;
+        text-align: right;
+    }
+
+    .menuItems.show {
+        display: flex;
+    }
+
+    .hamburgerButton {
+        display: block;
+    }
 }
