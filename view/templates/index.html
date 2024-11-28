@@ -3,8 +3,22 @@
     {% include "navbar.html" %}
     <div class="container text-center">
         <h1>Welcome to DocGuard</h1>
-        <p>Your secure solution for document verification and protection.</p>
+        <div id="animated_text"></div>
     </div>
     {% include "footer.html" %}
+    <script>
+        var string = "Your secure solution for document verification and protection."; /* type your text here */
+        var array = string.split("");
+        var timer;
+        function frameLooper () {
+            if (array.length > 0) {
+                document.getElementById("animated_text").innerHTML += array.shift();
+            } else {
+                clearTimeout(timer);
+            }
+            loopTimer = setTimeout('frameLooper()',70); /* change 70 for speed */
+        }
+        frameLooper();
+    </script>
 </body>
 </html>
