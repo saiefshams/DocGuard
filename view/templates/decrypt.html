@@ -1,0 +1,14 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container"> 
+        <h1>Decrypt Document</h1> 
+        <form action="{{ url_for('decrypt') }}" method="post" enctype="multipart/form-data"> 
+            <input type="file" name="document" required> 
+            <input type="text" name="key" placeholder="AES Key" required> 
+            <button type="submit">Decrypt</button> 
+        </form> 
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

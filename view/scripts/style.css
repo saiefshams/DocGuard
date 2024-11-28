@@ -27,7 +27,7 @@ body {
 }
 
 .navbar-brand {
-    font-family: "bebas", sans-serif;
+    font-family: "Orbitron", sans-serif; /* Update font to Orbitron */
     font-size: 2em;
     text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
     color: silver;
@@ -107,6 +107,53 @@ h1 {
     width: 100%;
     text-align: center;
     padding: 1em;
+}
+
+button, .btn {
+    background-color: transparent;
+    border: 2px solid #00ff00; /* Neon green border */
+    color: #00ff00; /* Neon green text */
+    font-family: "montserrat", sans-serif;
+    padding: 10px 20px;
+    border-radius: 25px; /* Rounded corners */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition */
+    text-decoration: none; /* Remove underline */
+}
+
+button:hover, .btn:hover {
+    background-color: #00ff00; /* Fill with neon green */
+    color: #141414; /* Change text to dark background */
+}
+
+input[type="text"], input[type="password"] {
+    background-color: transparent;
+    border: 2px solid #00ff00; /* Neon green border */
+    color: #00ff00; /* Neon green text */
+    font-family: "montserrat", sans-serif;
+    padding: 10px 20px;
+    border-radius: 25px; /* Rounded corners */
+    cursor: pointer;
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Ensure each input is on its own line */
+    width: 100%; /* Adjust width as needed */
+    margin-bottom: 10px; /* Add space between inputs */
+}
+
+input[type="text"]::placeholder, input[type="password"]::placeholder {
+    color: #00ff00; /* Neon green placeholder text */
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none; /* Remove default outline */
+}
+
+input[type="file"] {
+    color: silver; /* Original text color for file input */
+    padding: 10px;
+    display: block; /* Ensure each input is on its own line */
+    margin-bottom: 10px; /* Add space between inputs */
 }
 
 @media screen and (max-width: 768px) {

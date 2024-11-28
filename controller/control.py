@@ -1,5 +1,9 @@
 import hashlib
 import time
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from base64 import b64encode, b64decode
+
 
 # Blockchain classes
 class Block:
@@ -47,3 +51,24 @@ def upload_document(document_content):
     blockchain.add_block(document_hash)
     print("Block added to blockchain. Current chain length:", len(blockchain.chain))
     return document_hash
+
+
+# AES Encryption and Decryption functions
+def generate_aes_key():
+    key = get_random_bytes(32) # 32 bytes = 256 bits
+    return b64encode(key).decode('utf-8')
+
+def encrypt_document(document_content, key):
+    key = b64decode(key)
+    cipher = AES.new(key, AES.MODE_GCM) # GCM mode provides authenticated encryption
+    ciphertext, tag = cipher.encrypt_and_digest(document_content)
+    return b64encode(cipher.nonce).decode('utf-8'), b64encode(ciphertext).decode('utf-8'), b64encode(tag).decode('utf-8')
+
+def decrypt_document(nonce, ciphertext, tag, key):
+    key = b64decode(key)
+    nonce = b64decode(nonce)
+    ciphertext = b64decode(ciphertext)
+    tag = b64decode(tag)
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+    document_content = cipher.decrypt_and_verify(ciphertext, tag)
+    return document_content
