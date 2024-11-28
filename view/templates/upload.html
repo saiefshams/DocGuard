@@ -1,0 +1,13 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Upload Document</h1>
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="document" required> <!-- Ensure name attribute matches 'document' -->
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
