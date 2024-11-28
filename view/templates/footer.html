@@ -1,3 +1,24 @@
-<footer class="text-center text-white py-3">
+<footer class="basicFooter">
     <p>&copy; 2024 DocGuard. All rights reserved.</p>
 </footer>
+
+<script>
+    function toggleMenu() {
+        var menu = document.querySelector('.menuItems');
+        if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            menu.style.maxHeight = null;
+        } else {
+            menu.classList.add('show');
+            menu.style.maxHeight = menu.scrollHeight + "px";
+        }
+    }
+
+    window.onload = function() {
+        var navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(function(link) {
+            link.style.animation = "fadeIn 2s"
+        });
+    }
+
+</script>
