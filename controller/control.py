@@ -32,6 +32,24 @@ class Blockchain:
         self.chain.append(new_block)
         print("New block added - Index: ", new_block.index, ", Hash: ", new_block.hash)
         return new_block
+    
+    def is_chain_valid(self):
+        for i in range (1, len(self.chain)):
+            current_block = self.chain[i]
+            previous_block - self.chain[i - 1]
+
+            #check if the current block's hash is correct
+            if current_block.hash != Block.calculate_hash(current_block.index,current_block.previous_hash, current_block.timestamp, current_block.data):
+                print(f"Invalid block hash at index {current_block.index}")
+                return False
+            
+            #Check if the current block's previous hash matches the previous block's hash
+            if current_block.previous_hash != previous_block.hash:
+                print(f"Invalid previous hash at index {current_block.index}")
+                return False
+            
+        print ("Blockchain is valid")
+        return True
 
 # Initialize Blockchain
 blockchain = Blockchain()
@@ -47,3 +65,22 @@ def upload_document(document_content):
     blockchain.add_block(document_hash)
     print("Block added to blockchain. Current chain length:", len(blockchain.chain))
     return document_hash
+
+def verify_document(document_content):
+    document_hash = hash_document(document_content)
+    for block in blockchain.chain:
+        if block.data == document_hash:
+            print ("Document is valid and matches the blockchain record.")
+            return True
+    print ("Document does not match any blockchain record.")
+    return False
+
+#Example usage
+'''
+document_content = b"Sample document content"
+upload_document(document_content)
+'''
+#Verify the document
+'''
+verify_document(document_content)
+'''
