@@ -1,10 +1,11 @@
 <nav class="navbar">
-    <a class="navbar-brand" href="#">DocGuard</a>
+    <a class="navbar-brand" href="/">DocGuard</a>
     <div class="menuItems">
-        <a class="nav-link" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Pricing</a>
-        <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" href="{{ url_for('blockchain_status') }}">Blockchain</a>
+        <a class="nav-link" href="{{ url_for('upload') }}">Upload</a>
+        <a class="nav-link" href="#">Verify</a>
+        <a class="nav-link" href="#">Encrypt/Decrypt</a>
+        <a class="nav-link" href="#">Sign</a>
     </div>
     <button class="hamburgerButton" onclick="toggleMenu()">&#9776;</button>
 </nav>

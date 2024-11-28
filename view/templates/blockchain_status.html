@@ -1,0 +1,20 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Blockchain Status</h1>
+        <div id="blockchain-status">
+            {% for block in blockchain %}
+                <div class="block">
+                    <p><strong>Index:</strong> {{ block.index }}</p>
+                    <p><strong>Previous Hash:</strong> {{ block.previous_hash }}</p>
+                    <p><strong>Timestamp:</strong> {{ block.timestamp }}</p>
+                    <p><strong>Data:</strong> {{ block.data }}</p>
+                    <p><strong>Hash:</strong> {{ block.hash }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
