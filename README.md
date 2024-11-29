@@ -9,12 +9,14 @@
 ## Overview
 This project provides a secure and reliable way to verify document authenticity using blockchain technology and AES-based digital signatures. The system is built using Python and Flask for the backend, along with HTML, CSS, and Jinja for the frontend.
 
-## Features
-- **Document Upload**: Upload documents to be hashed and stored in the blockchain.
-- **Tampering Verification**: Verify if a document has been tampered with using its hash.
-- **Digital Signatures**: Sign documents using AES-based digital signatures and store the signatures in the blockchain.
-- **Signature Verification**: Verify the authenticity of a document's signature using AES keys.
-- **Blockchain Status**: View the current status of the blockchain, including all blocks and their data.
+## Features 
+- **Sign Documents**: Navigate to the "Sign" page, upload a document, and receive an AES key along with the signed document. The document’s hash is encrypted using the AES key to create a digital signature, which is then stored in the blockchain.
+- **Verify Signatures**: Navigate to the "Verify Signature" page, upload the signed document, and provide the AES key. The system verifies the signature by decrypting the stored signature using the AES key and comparing it with the hash of the uploaded document.
+- **Upload Documents**: Navigate to the "Upload" page to upload documents to the blockchain. The document is hashed using SHA-256, and the hash is stored in the blockchain along with the document’s filename and a unique document ID.
+- **Verify Documents**: Navigate to the "Verify" page to check document tampering. Upload the document and provide its document ID. The system compares the document’s hash with the stored hash in the blockchain to verify its authenticity.
+- **Encrypt Documents**: During the signing process, the document's hash is encrypted using AES encryption. This ensures the integrity and confidentiality of the signature.
+- **Decrypt Documents**: During signature verification, the encrypted hash (signature) is decrypted using the provided AES key to verify the document’s integrity.
+- **View Blockchain Status**: Navigate to the "Blockchain Status" page to see all blockchain entries. This includes the indexes, timestamps, filenames, document IDs, and the hash or signature data for each block.
 
 ## How It Works
 1. **Document Upload**:
@@ -50,11 +52,5 @@ Run the Flask App:
 ```sh
 python main.py
 ```
-Access the Application: Open your web browser and navigate to [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
-
-### Features:
-- **Sign Documents**: Navigate to the "Sign" page, upload a document, and receive an AES key and signed document.
-- **Verify Signatures**: Navigate to the "Verify Signature" page, upload the signed document, and provide the AES key.
-- **Upload Documents**: Navigate to the "Upload" page to upload documents to the blockchain.
-- **Verify Documents**: Navigate to the "Verify" page to check document tampering.
-- **View Blockchain Status**: Navigate to the "Blockchain Status" page to see all blockchain entries.
+## Access the Application
+Open your web browser and navigate to [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
