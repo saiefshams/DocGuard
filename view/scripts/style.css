@@ -156,6 +156,15 @@ input[type="file"] {
     margin-bottom: 10px; /* Add space between inputs */
 }
 
+/* New styles for the blockchain status table */
+.table-container {
+    width: 70%; /* Adjust the width as needed */
+    margin: auto; /* Center the table */
+    padding: 10px;
+    border-radius: 5px; /* Optional: Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Add a subtle shadow */
+}
+
 @media screen and (max-width: 768px) {
     .menuItems {
         justify-content: flex-end;

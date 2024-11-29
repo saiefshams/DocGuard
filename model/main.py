@@ -11,7 +11,7 @@ base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(base_dir, 'controller'))
 
 # Import functions from control.py
-from control import upload_document, blockchain, generate_aes_key, encrypt_document, decrypt_document
+from control import upload_document, blockchain, generate_aes_key, encrypt_document, decrypt_document, verify_document
 
 app = Flask(__name__, template_folder=os.path.join(base_dir, 'view', 'templates'), static_folder=os.path.join(base_dir, 'view', 'scripts'))
 app.secret_key = os.urandom(24)
@@ -34,9 +34,10 @@ def upload():
             return redirect(request.url)
         
         document_content = document.read()
-        print("Received document:", document.filename)
+        filename = document.filename
+        print("Received document:", filename)
         print("Document content (first 100 bytes):", document_content[:100])  # Print first 100 bytes for brevity
-        document_hash = upload_document(document_content)
+        document_hash = upload_document(document_content, filename)
         print("Document hash:", document_hash)
         return render_template('upload_success.html', document_hash=document_hash)
     return render_template('upload.html')
@@ -46,14 +47,26 @@ def blockchain_status():
     blockchain_data = [
         {
             'index': block.index,
-            'previous_hash': block.previous_hash,
-            'timestamp': block.timestamp,
-            'data': block.data,
-            'hash': block.hash
+            'timestamp': block.timestamp_str,
+            'data': block.data if block.index == 0 else eval(block.data)  # Handle genesis block separately
         }
         for block in blockchain.chain
     ]
     return render_template('blockchain_status.html', blockchain=blockchain_data)
+
+@app.route('/detailed_blockchain_status')
+def detailed_blockchain_status():
+    blockchain_data = [
+        {
+            'index': block.index,
+            'previous_hash': block.previous_hash,
+            'timestamp': block.timestamp_str,  # Ensure this uses timestamp_str
+            'data': block.data if block.index == 0 else eval(block.data),  # Handle genesis block separately
+            'hash': block.hash
+        }
+        for block in blockchain.chain
+    ]
+    return render_template('detailed_blockchain_status.html', blockchain=blockchain_data)
 
 @app.route('/choose_encryption')
 def choose_encryption():
@@ -129,7 +142,25 @@ def decrypt():
     
     return render_template('decrypt.html')
 
-
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    result = None
+    if request.method == 'POST':
+        if 'document' not in request.files:
+            print("No document part in the request")
+            return redirect(request.url)
+        
+        document = request.files['document']
+        
+        if document.filename == '':
+            print("No selected file")
+            return redirect(request.url)
+        
+        document_content = document.read()
+        filename = document.filename
+        result = verify_document(document_content, filename)
+    
+    return render_template('verify.html', result=result)
 
 # error handling
 @app.errorhandler(400)

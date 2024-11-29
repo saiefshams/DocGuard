@@ -1,0 +1,30 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Verify Document</h1>
+        <form action="{{ url_for('verify') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="document" required>
+            <button type="submit">Verify</button>
+        </form>
+        {% if result %}
+            <div class="result">
+                <h2>Verification Result</h2>
+                {% if result.status == 'valid' %}
+                    <p>Document is valid and matches the blockchain record.</p>
+                    <p>Index: {{ result.index }}</p>
+                    <p>Timestamp: {{ result.timestamp }}</p>
+                    <p>Filename: {{ result.filename }}</p>
+                    <p>Hash: {{ result.hash }}</p>
+                {% elif result.status == 'tampered' %}
+                    <p>Document content has been tampered with but matches the filename on the blockchain.</p>
+                    <p>Filename: {{ result.filename }}</p>
+                {% else %}
+                    <p>Document does not match any blockchain record.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
