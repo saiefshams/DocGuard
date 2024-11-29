@@ -1,8 +1,9 @@
 import sys
 import os
-from flask import Flask, render_template, request, redirect, send_file, session, url_for
+from flask import Flask, render_template, request, redirect, send_file, session, url_for, flash
 from io import BytesIO
 from tempfile import NamedTemporaryFile
+import hashlib
 
 # Set the base directory to the parent directory
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -11,7 +12,7 @@ base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(base_dir, 'controller'))
 
 # Import functions from control.py
-from control import upload_document, blockchain, generate_aes_key, encrypt_document, decrypt_document, verify_document
+from control import upload_document, blockchain, generate_aes_key, encrypt_document, decrypt_document, verify_document, sign_document, verify_document_signature
 
 app = Flask(__name__, template_folder=os.path.join(base_dir, 'view', 'templates'), static_folder=os.path.join(base_dir, 'view', 'scripts'))
 app.secret_key = os.urandom(24)
@@ -37,9 +38,9 @@ def upload():
         filename = document.filename
         print("Received document:", filename)
         print("Document content (first 100 bytes):", document_content[:100])  # Print first 100 bytes for brevity
-        document_hash = upload_document(document_content, filename)
+        document_hash, document_id = upload_document(document_content, filename)
         print("Document hash:", document_hash)
-        return render_template('upload_success.html', document_hash=document_hash)
+        return render_template('upload_success.html', document_hash=(document_hash, document_id))
     return render_template('upload.html')
 
 @app.route('/blockchain_status')
@@ -48,7 +49,7 @@ def blockchain_status():
         {
             'index': block.index,
             'timestamp': block.timestamp_str,
-            'data': block.data if block.index == 0 else eval(block.data)  # Handle genesis block separately
+            'data': block.data if block.index == 0 else block.data,  # Handle data without eval()
         }
         for block in blockchain.chain
     ]
@@ -61,7 +62,7 @@ def detailed_blockchain_status():
             'index': block.index,
             'previous_hash': block.previous_hash,
             'timestamp': block.timestamp_str,  # Ensure this uses timestamp_str
-            'data': block.data if block.index == 0 else eval(block.data),  # Handle genesis block separately
+            'data': block.data if block.index == 0 else block.data,  # Handle data without eval()
             'hash': block.hash
         }
         for block in blockchain.chain
@@ -161,6 +162,70 @@ def verify():
         result = verify_document(document_content, filename)
     
     return render_template('verify.html', result=result)
+
+@app.route('/sign_verify')
+def sign_verify():
+    return render_template('sign_verify.html')
+
+@app.route('/sign', methods=['GET', 'POST'])
+def sign():
+    if request.method == 'POST':
+        file = request.files['file']
+
+        # Read file content
+        file_content = file.read()
+
+        # Generate AES key for signing
+        aes_key = generate_aes_key()
+
+        # Sign the document with AES
+        signature = sign_document(file_content, aes_key)
+
+        # Append "SIGNATURE" to the filename
+        signature_filename = f"{file.filename}_SIGNATURE"
+
+        # Store the signature and document hash in the blockchain
+        blockchain.add_block({
+            'type': 'signature',
+            'filename': signature_filename,
+            'signature': signature,
+            'document_hash': signature['document_hash']
+        })
+
+        # Render the signature result template with AES key
+        return render_template('signature_result.html', aes_key=aes_key)
+
+    return render_template('sign.html')
+
+@app.route('/verify_signature', methods=['GET', 'POST'])
+def verify_signature():
+    if request.method == 'POST':
+        file = request.files['file']
+        aes_key = request.form['key']  # Read AES key from form
+
+        # Read file content
+        file_content = file.read()
+
+        # Construct expected signature filename
+        signature_filename = f"{file.filename}_SIGNATURE"
+
+        # Verify if the signature exists in the blockchain
+        for block in blockchain.chain:
+            if block.index == 0:
+                continue
+            if block.data.get('type') == 'signature' and block.data.get('filename') == signature_filename:
+                signature = block.data.get('signature')
+                if not signature:
+                    continue
+                # Use the provided AES key for verification
+                if verify_document_signature(file_content, aes_key, signature):
+                    return render_template('verification_successful.html')
+
+        flash('Signature verification failed!', 'danger')
+        return redirect(url_for('sign_verify'))
+
+    return render_template('verify_signature.html')
+
 
 # error handling
 @app.errorhandler(400)

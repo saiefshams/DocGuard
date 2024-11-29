@@ -5,6 +5,7 @@ from datetime import datetime
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from base64 import b64encode, b64decode
+import uuid
 
 
 # Blockchain classes
@@ -80,35 +81,25 @@ def hash_document(document):
 
 def upload_document(document_content, filename):
     document_hash = hash_document(document_content)
-    data = {'filename': filename, 'hash': document_hash}
-    blockchain.add_block(str(data))
+    document_id = str(uuid.uuid4())  # Generate a unique identifier for each document
+    data = {'type': 'original', 'filename': filename, 'document_id': document_id, 'hash': document_hash}
+    blockchain.add_block(data)
     print("Block added to blockchain. Current chain length:", len(blockchain.chain))
-    return document_hash
+    return document_hash, document_id
 
-def verify_document(document_content, filename):
+def verify_document(document_content, filename, document_id):
     document_hash = hash_document(document_content)
     for block in blockchain.chain:
-        # Skip the genesis block
         if block.index == 0:
             continue
-
-        block_data = eval(block.data)  # Convert string back to dictionary
-        if block_data['filename'] == filename:
+        block_data = block.data
+        if block_data['filename'] == filename and block_data['document_id'] == document_id:
             if block_data['hash'] == document_hash:
                 print("Document is valid and matches the blockchain record.")
-                return {
-                    'status': 'valid',
-                    'index': block.index,
-                    'timestamp': block.timestamp_str,
-                    'filename': filename,
-                    'hash': block_data['hash']
-                }
+                return {'status': 'valid', 'index': block.index, 'timestamp': block.timestamp_str, 'filename': filename, 'document_id': document_id, 'hash': block_data['hash']}
             else:
                 print("Document content has been tampered.")
-                return {
-                    'status': 'tampered',
-                    'filename': filename
-                }
+                return {'status': 'tampered', 'filename': filename}
     print("Document does not match any blockchain record.")
     return {'status': 'invalid'}
 
@@ -132,3 +123,14 @@ def decrypt_document(nonce, ciphertext, tag, key):
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
     document_content = cipher.decrypt_and_verify(ciphertext, tag)
     return document_content
+
+# AES-Based Digital Signature Functions
+def sign_document(document_content, key):
+    document_hash = hashlib.sha256(document_content).hexdigest()
+    nonce, encrypted_hash, tag = encrypt_document(document_hash.encode('utf-8'), key)
+    return {'nonce': nonce, 'encrypted_hash': encrypted_hash, 'tag': tag, 'document_hash': document_hash}
+
+def verify_document_signature(document_content, key, signature):
+    document_hash = hashlib.sha256(document_content).hexdigest()
+    decrypted_hash = decrypt_document(signature['nonce'], signature['encrypted_hash'], signature['tag'], key).decode('utf-8')
+    return decrypted_hash == document_hash

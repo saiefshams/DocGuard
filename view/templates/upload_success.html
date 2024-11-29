@@ -4,7 +4,9 @@
     <div class="container">
         <h1>Upload Successful</h1>
         <p>Your document has been successfully hashed and added to the blockchain.</p>
-        <p>Document Hash: {{ document_hash }}</p>
+        <p><strong>Document Hash:</strong> {{ document_hash[0] }}</p>
+        <p><strong>Document ID:</strong> {{ document_hash[1] }}</p>
+        <p>Keep this information secure as it verifies the authenticity of your document.</p>
     </div>
     {% include "footer.html" %}
 </body>
