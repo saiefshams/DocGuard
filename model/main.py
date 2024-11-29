@@ -145,23 +145,20 @@ def decrypt():
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
-    result = None
     if request.method == 'POST':
-        if 'document' not in request.files:
-            print("No document part in the request")
-            return redirect(request.url)
-        
-        document = request.files['document']
-        
-        if document.filename == '':
-            print("No selected file")
-            return redirect(request.url)
-        
-        document_content = document.read()
-        filename = document.filename
-        result = verify_document(document_content, filename)
-    
-    return render_template('verify.html', result=result)
+        file = request.files['document']
+        document_id = request.form['document_id']  # Read document ID from form
+
+        # Read file content
+        document_content = file.read()
+        filename = file.filename
+
+        # Verify the document using its hash and ID
+        result = verify_document(document_content, filename, document_id)
+
+        return render_template('verify.html', result=result)
+
+    return render_template('verify.html')
 
 @app.route('/sign_verify')
 def sign_verify():
