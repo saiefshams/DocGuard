@@ -18,28 +18,6 @@ This project provides a secure and reliable way to verify document authenticity 
 - **Decrypt Documents**: During signature verification, the encrypted hash (signature) is decrypted using the provided AES key to verify the document’s integrity.
 - **View Blockchain Status**: Navigate to the "Blockchain Status" page to see all blockchain entries. This includes the indexes, timestamps, filenames, document IDs, and the hash or signature data for each block.
 
-## How It Works
-1. **Document Upload**:
-    - The document is hashed using SHA-256 and stored in the blockchain with its filename and a unique document ID.
-    - A new block is created and added to the blockchain.
-
-2. **Tampering Verification**:
-    - Users can upload a document and provide its document ID.
-    - The system computes the document's hash and verifies it against the stored hash in the blockchain.
-    - Verification results indicate whether the document is valid, tampered, or not found.
-
-3. **Digital Signatures**:
-    - Users can sign a document using an AES key.
-    - The document's hash is encrypted using the AES key, creating a digital signature.
-    - The signature and document hash are stored in the blockchain, with "SIGNATURE" appended to the filename.
-
-4. **Signature Verification**:
-    - Users provide the signed document and the AES key.
-    - The system verifies the signature by decrypting the stored signature and comparing it with the computed document hash.
-    - Successful verification confirms the document's authenticity.
-
-5. **Blockchain Status**:
-    - Users can view the current status of the blockchain, including all blocks, their indexes, timestamps, and data.
 
 ## Installation
 To install the required dependencies, run:
