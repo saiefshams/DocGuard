@@ -1,0 +1,14 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Sign/Verify Document</h1>
+        <p>Please choose an action:</p>
+        <div class="button-group">
+            <a href="{{ url_for('sign') }}" class="btn btn-primary">Sign</a>
+            <a href="{{ url_for('verify_signature') }}" class="btn btn-secondary">Verify Signature</a>
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

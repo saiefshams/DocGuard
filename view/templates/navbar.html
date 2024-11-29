@@ -3,9 +3,9 @@
     <div class="menuItems">
         <a class="nav-link" href="{{ url_for('blockchain_status') }}">Blockchain</a>
         <a class="nav-link" href="{{ url_for('upload') }}">Upload</a>
-        <a class="nav-link" href="#">Verify</a>
-        <a class="nav-link" href="#">Encrypt/Decrypt</a>
-        <a class="nav-link" href="#">Sign</a>
+        <a class="nav-link" href="{{ url_for('verify') }}">Verify</a>
+        <a class="nav-link" href="{{ url_for('choose_encryption') }}">Encrypt</a>
+        <a class="nav-link" href="{{ url_for('sign_verify') }}">Sign</a>
     </div>
     <button class="hamburgerButton" onclick="toggleMenu()">&#9776;</button>
 </nav>

@@ -1,0 +1,12 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Encryption Result</h1>
+        <p><strong>AES Key:</strong> {{ aes_key }}</p>
+        <p><strong>Note:</strong> Please save the AES key securely as it will not be displayed again.</p>
+        <a href="{{ url_for('download_encrypted_file') }}" class="btn btn-primary">Download Encrypted File</a>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
