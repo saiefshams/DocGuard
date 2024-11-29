@@ -1,0 +1,2 @@
+# Ignore __pycache__ inside controller folder
+controller/__pycache__/
