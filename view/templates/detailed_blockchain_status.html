@@ -1,0 +1,25 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Detailed Blockchain Status</h1>
+        <div id="blockchain-status">
+            {% for block in blockchain %}
+                <div class="block">
+                    <p><strong>Index:</strong> {{ block.index }}</p>
+                    <p><strong>Previous Hash:</strong> {{ block.previous_hash }}</p>
+                    <p><strong>Timestamp:</strong> {{ block.timestamp }}</p>
+                    <p><strong>Data:</strong> {% if block.index == 0 %} {{ block.data }} {% else %} Filename: {{ block.data.filename }} <br> Hash: {{ block.data.hash }} {% endif %}</p>
+                    <p><strong>Hash:</strong> {{ block.hash }}</p>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+        <p></p>
+        <p></p>
+        <p>This view shows the detailed blockchain status, including each block's index, previous hash, 
+        <p>timestamp (in Canada time zone), data (document hash), and its own hash.</p>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

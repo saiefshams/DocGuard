@@ -1,0 +1,14 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Encrypt/Decrypt Document</h1>
+        <p>Please choose an action:</p>
+        <div class="button-group">
+            <a href="{{ url_for('encrypt') }}" class="btn btn-primary">Encrypt</a>
+            <a href="{{ url_for('decrypt') }}" class="btn btn-secondary">Decrypt</a>
+        </div>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Verify Document Signature</h1>
+        <form action="{{ url_for('verify_signature') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose file to verify:</label>
+                <input type="file" class="form-control" id="file" name="file" required>
+            </div>
+            <div class="form-group">
+                <label for="key">AES Key:</label>
+                <input type="text" class="form-control" id="key" name="key" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify Signature</button>
+        </form>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>

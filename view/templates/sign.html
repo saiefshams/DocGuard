@@ -1,0 +1,16 @@
+{% include "header.html" %}
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <h1>Sign Document</h1>
+        <form action="{{ url_for('sign') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose file to sign:</label>
+                <input type="file" class="form-control" id="file" name="file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Document</button>
+        </form>
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
